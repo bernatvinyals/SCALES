@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerController : CharacterController
 {
 
@@ -12,9 +12,9 @@ public class PlayerController : CharacterController
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
         maxScale = transform.localScale.x;
-        stepsForScale = 1f / maxBullets;
+        stepsForScale = 0.5f / maxBullets;
     }
     // Update is called once per frame
     void Update()
@@ -25,7 +25,7 @@ public class PlayerController : CharacterController
         CheckIfDead();
         StateMachine();
         float newScale = Mathf.Lerp(0.2f, maxScale, scale);
-        transform.localScale = new Vector2(newScale, newScale);
+        transform.localScale = new Vector3(newScale, newScale, newScale);
     }
 
     private void FixedUpdate()
@@ -33,12 +33,12 @@ public class PlayerController : CharacterController
         switch (state)
         {
             case CharacterSTATES.IDLE:
-                rb.velocity = Vector2.zero;
+                rb.velocity = Vector3.zero;
                 break;
             case CharacterSTATES.MOVE:
                 float horizontalInput = Input.GetAxis("Horizontal");
                 float verticalInput = Input.GetAxis("Vertical");
-                rb.velocity = new Vector2(horizontalInput * (currentVelocity), verticalInput * (currentVelocity));
+                rb.velocity = new Vector3(horizontalInput * (currentVelocity), 0f,verticalInput * (currentVelocity) );
 
                 break;
             default:break;
@@ -76,9 +76,19 @@ public class PlayerController : CharacterController
                 break;
             case CharacterSTATES.ATTACK:
                 //Animation change
-                SpawnBullet(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-                state = CharacterSTATES.IDLE;
-                ReduceSize();
+                RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(ray, out hit))
+                {
+                    Vector3 objectHit = hit.point;
+
+                    //SpawnBullet(Camera.main.ScreenToWorldPoint(Input.mousePosition)); Deprecated only for 2d
+
+                    SpawnBullet(objectHit);
+                    state = CharacterSTATES.IDLE;
+                    ReduceSize();
+                }
                 break;
             case CharacterSTATES.HIT:
                 ReduceSize();

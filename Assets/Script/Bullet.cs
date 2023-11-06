@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody))]
 public class Bullet : MonoBehaviour
 {
     enum BulletStates{
@@ -11,7 +11,7 @@ public class Bullet : MonoBehaviour
 
     Vector3 direction = Vector3.zero;
     
-    Rigidbody2D rb;
+    Rigidbody rb;
     float velocity = 50f;
     public bool activated = true;
     public float maxTimeAlive = 5f;
@@ -22,10 +22,17 @@ public class Bullet : MonoBehaviour
     GameObject parent = null;
     bool isFromPlayer = false;
 
+    public Collider damageColider = null;
+    public Collider grabColider = null;
     private void Start()
     {
         state = BulletStates.Air;
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
+        if (grabColider != null)
+        {
+            grabColider.isTrigger = true;
+        }
+
     }
     public void SetDirection(Vector3 vect)
     {
@@ -52,7 +59,6 @@ public class Bullet : MonoBehaviour
                 rb.velocity = direction * velocity;
                 break;
             default:
-                rb.velocity = Vector2.zero;
                 break;
         }
         
@@ -83,7 +89,11 @@ public class Bullet : MonoBehaviour
 
             case BulletStates.AfterHit:
                 velocity = 0;
+                damageColider.isTrigger = false;
+                grabColider.gameObject.SetActive(true);
                 direction = Vector3.zero;
+                rb.velocity = Vector3.zero;
+                rb.useGravity = true;
                 state = BulletStates.Ground;
                 break;
             case BulletStates.Ground:
@@ -102,7 +112,8 @@ public class Bullet : MonoBehaviour
                 break;
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    
+    private void OnTriggerEnter(Collider collision)
     {
         if (!activated)
         {

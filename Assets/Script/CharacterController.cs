@@ -24,10 +24,10 @@ public class CharacterController : MonoBehaviour
     protected CharacterSTATES state = CharacterSTATES.IDLE;
 
 
-    protected Rigidbody2D rb;
+    protected Rigidbody rb;
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
     }
     public void HitDamage(int hp)
     {
@@ -45,7 +45,6 @@ public class CharacterController : MonoBehaviour
         Vector3 worldPosition = target;
         Vector3 targetForBullet = gameObject.transform.position - worldPosition;
         targetForBullet = targetForBullet.normalized * -1;
-        targetForBullet.z = 0.0f;
         GameObject bullet = Instantiate(prefabBullet, transform.position, Quaternion.identity);
         Bullet classBullet = bullet.GetComponent<Bullet>();
         classBullet.SetDirection(targetForBullet);
