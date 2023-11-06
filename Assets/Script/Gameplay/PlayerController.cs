@@ -92,6 +92,7 @@ public class PlayerController : CharacterController
                 break;
             case CharacterSTATES.HIT:
                 ReduceSize();
+                ReducceBullets();
                 state = CharacterSTATES.IDLE;
                 break;
             case CharacterSTATES.DEAD:
@@ -128,6 +129,7 @@ public class PlayerController : CharacterController
     }
     private void OnGUI()
     {
+        GUI.Box(new Rect(5, 5, 130, 200), "");
         GUI.Label(new Rect(10, 10, 200, 30), $"Bullets: {bullets}");
         GUI.Label(new Rect(10, 30, 200, 30), $"Max Bullets: {maxBullets}");
         GUI.Label(new Rect(10, 50, 200, 30), $"HP: {health}");
