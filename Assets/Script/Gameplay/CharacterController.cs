@@ -8,7 +8,7 @@ public class CharacterController : GameplayObject
 
     public enum CharacterSTATES
     {
-        IDLE, MOVE, HIT, ATTACK, DEAD, _LAST
+        IDLE, MOVE, HIT, ATTACK, DEAD, DISABLED, _LAST
     }
 
     public int health = 10;
@@ -26,9 +26,29 @@ public class CharacterController : GameplayObject
     public int damagePoints = 1;
 
     protected Rigidbody rb;
+    public Collider colisions;
+
+    public delegate void IsDead();
+    public event IsDead characterIsDead;
     void Start()
     {
+        if (colisions == null)
+        {
+            colisions = GetComponentInChildren<Collider>();
+        }
         rb = GetComponent<Rigidbody>();
+    }
+    public void SetState(CharacterSTATES in_state)
+    {
+        this.state = in_state;
+        if (state == CharacterSTATES.DEAD)
+        {
+            characterIsDead?.Invoke();
+        }
+    }
+    public CharacterSTATES GetState()
+    {
+        return this.state;
     }
     public void HitDamage(int hp)
     {
@@ -36,12 +56,12 @@ public class CharacterController : GameplayObject
         state = CharacterSTATES.HIT;
     }
  
-    protected void SpawnBullet(Vector3 target)
+    protected bool SpawnBullet(Vector3 target)
     {
         if (bullets <= 0)
         {
             bullets = 0;
-            return;
+            return false;
         }
         Vector3 worldPosition = target;
         worldPosition.y = this.gameObject.transform.position.y;
@@ -56,13 +76,14 @@ public class CharacterController : GameplayObject
         {
             bullets -= 1;
         }
+        return true;
 
     }
     protected bool CheckIfDead()
     {
         if (health <= 0)
         {
-            state = CharacterSTATES.DEAD;
+            SetState(CharacterSTATES.DEAD);
         }
         return health <= 0;
     }

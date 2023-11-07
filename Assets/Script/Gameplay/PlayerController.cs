@@ -10,8 +10,14 @@ public class PlayerController : CharacterController
     private float stepsForScale = 0.1f;
     // Start is called before the first frame update
 
+    bool isCameraControlled = false;
+    Vector3 transitionPoint = Vector3.zero;
     private void Start()
     {
+        if (colisions == null)
+        {
+            colisions = GetComponentInChildren<Collider>();
+        }
         rb = GetComponent<Rigidbody>();
         maxScale = transform.localScale.x;
         stepsForScale = 0.5f / maxBullets;
@@ -36,9 +42,27 @@ public class PlayerController : CharacterController
                 rb.velocity = Vector3.zero;
                 break;
             case CharacterSTATES.MOVE:
-                float horizontalInput = Input.GetAxis("Horizontal");
-                float verticalInput = Input.GetAxis("Vertical");
-                rb.velocity = new Vector3(horizontalInput * (currentVelocity), 0f,verticalInput * (currentVelocity) );
+                if (!isCameraControlled)
+                {//If the player isn't controlled by the camera
+                    float horizontalInput = Input.GetAxis("Horizontal");
+                    float verticalInput = Input.GetAxis("Vertical");
+                    rb.velocity = new Vector3(horizontalInput * (currentVelocity), 0f, verticalInput * (currentVelocity));
+                }
+                else
+                {
+                    rb.velocity = Vector3.zero;
+                    rb.useGravity = false;
+                    colisions.gameObject.SetActive(false);
+                    float step = currentVelocity * Time.deltaTime;
+                    this.transform.position = Vector3.MoveTowards(this.transform.position, transitionPoint, step);
+                    if (Vector3.Distance(this.transform.position, transitionPoint) <= 0.5f)
+                    {
+                        isCameraControlled = false;
+                        colisions.gameObject.SetActive(true);
+                        rb.useGravity = true;
+
+                    }
+                }
 
                 break;
             default:break;
@@ -46,6 +70,10 @@ public class PlayerController : CharacterController
     }
     void InputProcessor()
     {
+        if (isCameraControlled)
+        {
+            return;
+        }
         if (state == CharacterSTATES.IDLE || state == CharacterSTATES.MOVE)
         {
             if (Input.GetAxis("Horizontal") != 0.0f || Input.GetAxis("Vertical") != 0.0f)
@@ -85,9 +113,12 @@ public class PlayerController : CharacterController
 
                     //SpawnBullet(Camera.main.ScreenToWorldPoint(Input.mousePosition)); Deprecated only for 2d
 
-                    SpawnBullet(objectHit);
+                    if (SpawnBullet(objectHit))
+                    {
+                        ReduceSize();
+                    }
                     state = CharacterSTATES.IDLE;
-                    ReduceSize();
+                    
                 }
                 break;
             case CharacterSTATES.HIT:
@@ -101,7 +132,12 @@ public class PlayerController : CharacterController
             default: break;
         }
     }
-
+    public void SetTransitionPoint(Vector3 point, bool changeState = false)
+    {
+        transitionPoint = point;
+        isCameraControlled = changeState;
+        if (changeState ) { state = CharacterSTATES.MOVE; }
+    }
     private void ReduceSize()
     {
         scale -= stepsForScale;

@@ -8,6 +8,7 @@ public enum GameplayFlags
 {
     IGNORE_BULLETS = 1 << 0,
     GROUND_BULLETS = 1 << 1,
+    TRANSITION_REQUIRED = 1 << 2,
 }
 public class GameplayObject : MonoBehaviour
 {

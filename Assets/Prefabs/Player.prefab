@@ -147,11 +147,12 @@ MonoBehaviour:
   prefabBullet: {fileID: 7686336844466385892, guid: 1f9225e71360f5446b554a7def434a78, type: 3}
   health: 20
   maxHealth: 20
-  velocity: 10
-  maxVelocity: 10
-  bullets: 30
-  maxBullets: 30
+  velocity: 8
+  maxVelocity: 13
+  bullets: 20
+  maxBullets: 20
   infiniteBullets: 0
+  damagePoints: 1
   scale: 1
 --- !u!54 &3651441738084244097
 Rigidbody:

@@ -15,7 +15,7 @@ public class Bullet : GameplayObject
     float velocity = 50f;
     public bool activated = true;
     public float maxTimeAliveOnAir = 5f;
-    public float maxTimeAliveOnGround = 60f;
+    float maxTimeAliveOnGround = 200f;
 
     private float timer = 0;
     BulletStates state = BulletStates.Air;
@@ -28,6 +28,7 @@ public class Bullet : GameplayObject
     public Collider grabColider = null;
     private void Start()
     {
+        maxTimeAliveOnGround = 200f;
         state = BulletStates.Air;
         rb = GetComponent<Rigidbody>();
         if (grabColider != null)
@@ -161,6 +162,10 @@ public class Bullet : GameplayObject
 
                 }
             }
+            return;
+        }
+        if (cc.GetState() == CharacterController.CharacterSTATES.DISABLED)
+        {
             return;
         }
         if (collision.gameObject.tag != parent.gameObject.tag)
