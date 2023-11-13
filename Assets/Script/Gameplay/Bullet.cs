@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Bullet : GameplayObject
 {
-    enum BulletStates{
-        Air, Hit, AfterHit, Ground, Expired, _Last
+    public enum BulletStates{
+        Air, Hit, AfterHit,PickupCooldown, Ground, Expired, _Last
     }
 
     Vector3 direction = Vector3.zero;
@@ -17,8 +18,12 @@ public class Bullet : GameplayObject
     public float maxTimeAliveOnAir = 5f;
     float maxTimeAliveOnGround = 200f;
 
+    public float pickupCooldown = 1f;
     private float timer = 0;
+    private float timerGrabCooldown = 0f;
     BulletStates state = BulletStates.Air;
+
+
 
     int damage = 10;
     GameObject parent = null;
@@ -29,13 +34,16 @@ public class Bullet : GameplayObject
     private void Start()
     {
         maxTimeAliveOnGround = 200f;
-        state = BulletStates.Air;
         rb = GetComponent<Rigidbody>();
         if (grabColider != null)
         {
             grabColider.isTrigger = true;
         }
 
+    }
+    public void SetState(BulletStates in_state)
+    {
+        state = in_state;
     }
     public void SetDirection(Vector3 vect)
     {
@@ -96,13 +104,31 @@ public class Bullet : GameplayObject
 
             case BulletStates.AfterHit:
                 timer = 0f;
+                timerGrabCooldown = 0f;
                 velocity = 0f;
                 damageColider.isTrigger = false;
-                grabColider.gameObject.SetActive(true);
+                
                 direction = Vector3.zero;
                 rb.velocity = Vector3.zero;
                 rb.useGravity = true;
-                state = BulletStates.Ground;
+                state = BulletStates.PickupCooldown;
+                /*gameObject.transform.position = new Vector3(
+                    Random.Range(
+                    gameObject.transform.position.x - 1.0f,
+                    gameObject.transform.position.x + 1.0f),
+                    gameObject.transform.position.y,
+                    Random.Range(
+                    gameObject.transform.position.z - 1.0f,
+                    gameObject.transform.position.z + 1.0f)                
+                ); Random spawn for grabs   */
+                break;
+            case BulletStates.PickupCooldown:
+                timerGrabCooldown += Time.deltaTime;
+                if (timerGrabCooldown > pickupCooldown)
+                {
+                    grabColider.gameObject.SetActive(true);
+                    state = BulletStates.Ground;
+                }
                 break;
             case BulletStates.Ground:
                 timer += Time.deltaTime;

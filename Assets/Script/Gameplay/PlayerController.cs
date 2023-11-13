@@ -122,8 +122,7 @@ public class PlayerController : CharacterController
                 }
                 break;
             case CharacterSTATES.HIT:
-                ReduceSize();
-                ReducceBullets();
+                //Animation change
                 state = CharacterSTATES.IDLE;
                 break;
             case CharacterSTATES.DEAD:
@@ -146,6 +145,25 @@ public class PlayerController : CharacterController
             scale = 0.1f;
         }
     }
+
+    public override void HitDamage(int hp)
+    {
+        state = CharacterSTATES.HIT;
+        if (bullets <= 0)
+        {
+            health -= hp;
+        }
+        else
+        {
+            /*for (int i = 0; i < hp; i++)
+            {
+            } Old iterator spawn bullets for each damage point    */
+                SpawnBullet(Vector3.zero,false,Bullet.BulletStates.AfterHit);//Spawn bullet on the ground
+            ReducceBullets(); //Reducce the amount of bullets
+            ReduceSize();
+        }
+    }
+
     public void AugmentSize()
     {
         scale += stepsForScale;

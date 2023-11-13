@@ -14,8 +14,11 @@ public class CameraTransition : MonoBehaviour
             if(other.gameObject.tag == "Player")
             {
                 PlayerController player = other.gameObject.transform.parent.GetComponent<PlayerController>();
-                player?.SetTransitionPoint(newPlayerPoint.transform.position, true);
-                
+                if (player != null)
+                {
+                    player.SetTransitionPoint(newPlayerPoint.transform.position, true);
+
+                }
             }
         }
     }

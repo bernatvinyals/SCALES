@@ -7,7 +7,17 @@ public class PressurePlate : Interactuble
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        GameplayObject a = other.gameObject.transform.parent.GetComponent<GameplayObject>();
+        bool b = a != null;
+        if (b)
+        {
+            if((a.flags & (GameplayFlags.INSTACED_FROM_PLAYER)) != 0)
+            {
+                //If its form a player
+                b = true;
+            }else { b = false; }
+        }
+        if (other.gameObject.tag == "Player" || b)
         {
             this.invokeInteractedOnce(); 
         }

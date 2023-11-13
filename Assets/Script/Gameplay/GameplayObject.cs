@@ -9,6 +9,7 @@ public enum GameplayFlags
     IGNORE_BULLETS = 1 << 0,
     GROUND_BULLETS = 1 << 1,
     TRANSITION_REQUIRED = 1 << 2,
+    INSTACED_FROM_PLAYER = 1 << 3,
 }
 public class GameplayObject : MonoBehaviour
 {

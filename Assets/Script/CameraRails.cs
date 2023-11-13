@@ -14,6 +14,12 @@ public class CameraRails : MonoBehaviour
     public GameObject cameraPoint = null;
     public float timeBetween = 1f;
     private float timer = 0f;
+
+    private void Awake()
+    {
+        Camera cam = this.gameObject.GetComponent<Camera>();
+        Camera.SetupCurrent(cam);
+    }
     void Start()
     {
         playerRef = FindAnyObjectByType<PlayerController>();

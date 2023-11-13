@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static CharacterController;
+
 
 public class CharacterController : GameplayObject
 {
+    
     public GameObject prefabBullet;
 
     public enum CharacterSTATES
@@ -50,13 +53,13 @@ public class CharacterController : GameplayObject
     {
         return this.state;
     }
-    public void HitDamage(int hp)
+    public virtual void HitDamage(int hp)
     {
         health -= hp;
         state = CharacterSTATES.HIT;
     }
  
-    protected bool SpawnBullet(Vector3 target)
+    protected bool SpawnBullet(Vector3 target, bool wasteBullets = true, Bullet.BulletStates state = Bullet.BulletStates.Air)
     {
         if (bullets <= 0)
         {
@@ -72,7 +75,8 @@ public class CharacterController : GameplayObject
         classBullet.SetDirection(targetForBullet);
         classBullet.SetParent(this.gameObject);
         classBullet.SetDamage(damagePoints);
-        if (!infiniteBullets)
+        classBullet.SetState(state);
+        if (!infiniteBullets && wasteBullets)
         {
             bullets -= 1;
         }
