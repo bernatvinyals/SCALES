@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Camera;
+
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : CharacterController
 {
@@ -12,8 +14,20 @@ public class PlayerController : CharacterController
 
     bool isCameraControlled = false;
     Vector3 transitionPoint = Vector3.zero;
+
+
+    RaycastHit mousePosition;
+    Ray cameraRay;
+
+
+    //Mouse Position Properties
+    public GameObject playerCursor;
+    private GameObject Instanced_Cursor;
+    private bool cameraRayMouseStatus = false;
+    private Vector3 oldMousePosition = Vector3.zero;
     private void Start()
     {
+        UiManager.Instance.SetPlayerRef(this);
         if (colisions == null)
         {
             colisions = GetComponentInChildren<Collider>();
@@ -21,12 +35,16 @@ public class PlayerController : CharacterController
         rb = GetComponent<Rigidbody>();
         maxScale = transform.localScale.x;
         stepsForScale = 0.5f / maxBullets;
+
+        if (playerCursor != null)
+        {
+            Instanced_Cursor = Instantiate(playerCursor);
+        }
     }
     // Update is called once per frame
     void Update()
     {
         currentVelocity = Mathf.Lerp(velocity, maxVelocity, (scale*-1)+1);
-
         InputProcessor();
         CheckIfDead();
         StateMachine();
@@ -73,12 +91,16 @@ public class PlayerController : CharacterController
         if (isCameraControlled)
         {
             return;
+        } 
+        if (Input.GetKeyDown(KeyCode.Escape)){
+            UiManager.Instance.PauseGame();
         }
         if (state == CharacterSTATES.IDLE || state == CharacterSTATES.MOVE)
         {
             if (Input.GetAxis("Horizontal") != 0.0f || Input.GetAxis("Vertical") != 0.0f)
             {
                 state = CharacterSTATES.MOVE;
+                oldMousePosition = Vector3.zero;
             }
             else
             {
@@ -97,19 +119,19 @@ public class PlayerController : CharacterController
         {
             case CharacterSTATES.IDLE:
                 //Animation change
+                UpdateMousePosition();
                 break;
             case CharacterSTATES.MOVE:
                 //Animation change
-
+                UpdateMousePosition();
                 break;
             case CharacterSTATES.ATTACK:
                 //Animation change
-                RaycastHit hit;
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                UpdateMousePosition();
 
-                if (Physics.Raycast(ray, out hit))
+                if (cameraRayMouseStatus)
                 {
-                    Vector3 objectHit = hit.point;
+                    Vector3 objectHit = mousePosition.point;
 
                     //SpawnBullet(Camera.main.ScreenToWorldPoint(Input.mousePosition)); Deprecated only for 2d
 
@@ -118,7 +140,7 @@ public class PlayerController : CharacterController
                         ReduceSize();
                     }
                     state = CharacterSTATES.IDLE;
-                    
+
                 }
                 break;
             case CharacterSTATES.HIT:
@@ -131,6 +153,20 @@ public class PlayerController : CharacterController
             default: break;
         }
     }
+
+    private void UpdateMousePosition()
+    {
+        if (oldMousePosition == Input.mousePosition)
+        {
+            return;
+        }
+        oldMousePosition = Input.mousePosition;
+        cameraRay = Camera.main.ScreenPointToRay(oldMousePosition, MonoOrStereoscopicEye.Mono);
+        cameraRayMouseStatus = Physics.Raycast(cameraRay, out mousePosition);
+        Instanced_Cursor.gameObject.transform.position = new Vector3(mousePosition.point.x, this.transform.position.y, mousePosition.point.z);
+
+    }
+
     public void SetTransitionPoint(Vector3 point, bool changeState = false)
     {
         transitionPoint = point;
@@ -162,6 +198,7 @@ public class PlayerController : CharacterController
             ReducceBullets(); //Reducce the amount of bullets
             ReduceSize();
         }
+        BroadcastHurt();
     }
 
     public void AugmentSize()
@@ -180,13 +217,17 @@ public class PlayerController : CharacterController
         {
             bullets = maxBullets;
         }
+        BroadcastShoot();
     }
     private void OnGUI()
     {
+#if UNITY_EDITOR
         GUI.Box(new Rect(5, 5, 130, 200), "");
         GUI.Label(new Rect(10, 10, 200, 30), $"Bullets: {bullets}");
         GUI.Label(new Rect(10, 30, 200, 30), $"Max Bullets: {maxBullets}");
         GUI.Label(new Rect(10, 50, 200, 30), $"HP: {health}");
         GUI.Label(new Rect(10, 70, 200, 30), $"Current velocity: {currentVelocity}");
+        GUI.Label(new Rect(10, 90, 200, 30), $"GUI HP: {uiMaxHp}");
+#endif
     }
 }

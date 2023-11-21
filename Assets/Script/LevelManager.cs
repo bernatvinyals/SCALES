@@ -15,6 +15,7 @@ public class LevelManager : MonoBehaviour
 
         public void Start()
         {
+            UiManager.Instance?.HideCursor();
             if (enemyManager != null)
             {
                 foreach (var enemy in enemyManager.listOfEnemies)

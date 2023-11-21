@@ -10,10 +10,10 @@ public class Bullet : GameplayObject
         Air, Hit, AfterHit,PickupCooldown, Ground, Expired, _Last
     }
 
-    Vector3 direction = Vector3.zero;
+    protected Vector3 direction = Vector3.zero;
     
-    Rigidbody rb;
-    float velocity = 50f;
+    protected Rigidbody rb;
+    public float velocity = 50f;
     public bool activated = true;
     public float maxTimeAliveOnAir = 5f;
     float maxTimeAliveOnGround = 200f;
@@ -21,13 +21,13 @@ public class Bullet : GameplayObject
     public float pickupCooldown = 1f;
     private float timer = 0;
     private float timerGrabCooldown = 0f;
-    BulletStates state = BulletStates.Air;
+    protected BulletStates state = BulletStates.Air;
 
 
 
     int damage = 10;
-    GameObject parent = null;
-    bool isFromPlayer = false;
+    protected GameObject parent = null;
+    protected bool isFromPlayer = false;
 
     public Collider damageColider = null;
     public Collider grabColider = null;

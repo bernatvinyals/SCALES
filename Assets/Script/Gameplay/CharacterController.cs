@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,7 +17,9 @@ public class CharacterController : GameplayObject
 
     public int health = 10;
     public int maxHealth = 10;
-    
+    [NonSerialized]
+    public float uiMaxHp = 10f; //Normalized hp between 10
+
     public float velocity = 10f;
     protected float currentVelocity = 10f;
     public float maxVelocity = 10f;
@@ -31,10 +34,22 @@ public class CharacterController : GameplayObject
     protected Rigidbody rb;
     public Collider colisions;
 
+    //EVENT Character shoots
+    public delegate void HasShoot();
+    public event HasShoot hasShoot;
+
+
+
+    //EVENT Character gets hurt
+    public delegate void IsHurt();
+    public event IsHurt characterRecivedDamage;
+
+    //EVENT Character dies
     public delegate void IsDead();
     public event IsDead characterIsDead;
     void Start()
     {
+        SetMaxHP(maxHealth);
         if (colisions == null)
         {
             colisions = GetComponentInChildren<Collider>();
@@ -57,8 +72,16 @@ public class CharacterController : GameplayObject
     {
         health -= hp;
         state = CharacterSTATES.HIT;
+        BroadcastHurt();
     }
- 
+    public virtual void SetMaxHP(int hp)
+    {
+        health = hp;
+        maxHealth = hp;
+        BroadcastHurt(); //Calling Hit so anything regarding hp
+                                          // is going to get notified
+    }
+
     protected bool SpawnBullet(Vector3 target, bool wasteBullets = true, Bullet.BulletStates state = Bullet.BulletStates.Air)
     {
         if (bullets <= 0)
@@ -70,7 +93,8 @@ public class CharacterController : GameplayObject
         worldPosition.y = this.gameObject.transform.position.y;
         Vector3 targetForBullet = gameObject.transform.position - worldPosition;
         targetForBullet = targetForBullet.normalized * -1;
-        GameObject bullet = Instantiate(prefabBullet, transform.position, Quaternion.identity);
+        GameObject bullet = Instantiate(prefabBullet, 
+            transform.position, Quaternion.identity);
         Bullet classBullet = bullet.GetComponent<Bullet>();
         classBullet.SetDirection(targetForBullet);
         classBullet.SetParent(this.gameObject);
@@ -80,6 +104,8 @@ public class CharacterController : GameplayObject
         {
             bullets -= 1;
         }
+
+        BroadcastShoot();
         return true;
 
     }
@@ -98,6 +124,7 @@ public class CharacterController : GameplayObject
         {
             bullets = maxBullets;
         }
+        BroadcastShoot();
     }
     public virtual void ReducceBullets(int quantity = 1)
     {
@@ -106,5 +133,14 @@ public class CharacterController : GameplayObject
         {
             bullets = 0;
         }
+    }
+    protected void BroadcastHurt()
+    {
+        uiMaxHp = ((float)(health) / (float)(maxHealth)); 
+        characterRecivedDamage?.Invoke();
+    }
+    protected void BroadcastShoot()
+    {
+        hasShoot?.Invoke();
     }
 }
