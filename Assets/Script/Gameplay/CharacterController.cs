@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using static CharacterController;
 
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(Rigidbody))]
 
 public class CharacterController : GameplayObject
 {
-    
+
     public GameObject prefabBullet;
 
     public enum CharacterSTATES
@@ -33,6 +35,9 @@ public class CharacterController : GameplayObject
 
     protected Rigidbody rb;
     public Collider colisions;
+
+    Animator animator;
+
 
     //EVENT Character shoots
     public delegate void HasShoot();

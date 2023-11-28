@@ -12,7 +12,7 @@ public class UIGame : MonoBehaviour
     bool firstFrame = true;
     private void Start()
     {
-        UiManager.Instance.SetGameplayStatus(true);
+        UiManager.Instance?.SetGameplayStatus(true);
     }
     void Update()
     {

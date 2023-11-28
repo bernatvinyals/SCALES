@@ -152,6 +152,7 @@ GameObject:
   - component: {fileID: 3011285474327492378}
   - component: {fileID: 3768229639040027757}
   - component: {fileID: 6756751044035474783}
+  - component: {fileID: 2926336181378084549}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -198,6 +199,7 @@ MonoBehaviour:
   maxBullets: 10
   infiniteBullets: 1
   damagePoints: 5
+  colisions: {fileID: 0}
   coondownBetweenShots: 1
 --- !u!54 &6756751044035474783
 Rigidbody:
@@ -215,3 +217,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!95 &2926336181378084549
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5615074962323143259}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

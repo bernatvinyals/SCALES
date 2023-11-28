@@ -10,9 +10,15 @@ public class Billboard : MonoBehaviour
         }
     }
 
-    void LateUpdate()
+    private void Start()
     {
         transform.forward = Camera.main.transform.forward;
+        
+    }
+
+    void LateUpdate()
+    {
+
     }
 
     void OnBecameVisible()

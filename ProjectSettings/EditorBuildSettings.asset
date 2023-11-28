@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Proto.unity
     guid: 380dec0917c206c4fb8fea0d8b6768f1
   - enabled: 1
+    path: Assets/Scenes/2-Game-Otono.unity
+    guid: 3cd1bdaa984337a4ea5d2ae3ab202d90
+  - enabled: 1
     path: Assets/Scenes/AllComponents.unity
     guid: 8cc5fbb6a92e6504d988570c3d6e6ecb
   m_configObjects: {}

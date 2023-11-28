@@ -27,7 +27,10 @@ public class PlayerController : CharacterController
     private Vector3 oldMousePosition = Vector3.zero;
     private void Start()
     {
-        UiManager.Instance.SetPlayerRef(this);
+        if (UiManager.Instance != null)
+        {
+            UiManager.Instance.SetPlayerRef(this);
+        }
         if (colisions == null)
         {
             colisions = GetComponentInChildren<Collider>();
@@ -93,7 +96,10 @@ public class PlayerController : CharacterController
             return;
         } 
         if (Input.GetKeyDown(KeyCode.Escape)){
-            UiManager.Instance.PauseGame();
+            if (UiManager.Instance != null)
+            {
+                UiManager.Instance.PauseGame();
+            }
         }
         if (state == CharacterSTATES.IDLE || state == CharacterSTATES.MOVE)
         {

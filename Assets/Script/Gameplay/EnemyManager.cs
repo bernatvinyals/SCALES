@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class EnemyManager : MonoBehaviour
 {
@@ -36,12 +37,19 @@ public class EnemyManager : MonoBehaviour
 
     public bool CheckIfAllEnemiesAreDead()
     {
-        foreach (EnemyController enemy in listOfEnemies)
+        int count = 0;
+        for(int i = 0;i < listOfEnemies.Count; i++)
         {
-            if (enemy == null) return false;
-            if (enemy?.GetState() == CharacterController.CharacterSTATES.DEAD) return true;
+            if (listOfEnemies[i] == null)
+            {
+                count += 1;
+            }
+            else if(listOfEnemies[i].GetState() == CharacterController.CharacterSTATES.DEAD)
+            {
+                count += 1;
+            }
         }
-        return false;
+        return count == listOfEnemies.Count;
     }
     private void OnTriggerEnter(Collider collider)
     {

@@ -10,6 +10,7 @@ public class EnemyController : CharacterController
     public float coondownBetweenShots = 1f;
     private float initalWait = 0f;
     private float timer = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
