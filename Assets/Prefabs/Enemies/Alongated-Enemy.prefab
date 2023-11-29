@@ -79,6 +79,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Alongated-Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 6571329035341700026, guid: 7ca68ce2f271a0c4b9e2b9a5eddaaa12, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6571329035341700026, guid: 7ca68ce2f271a0c4b9e2b9a5eddaaa12, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8295710938255156390, guid: 7ca68ce2f271a0c4b9e2b9a5eddaaa12, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 

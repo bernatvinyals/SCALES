@@ -158,6 +158,7 @@ MonoBehaviour:
   colisions: {fileID: 0}
   scale: 1
   playerCursor: {fileID: 3364806473142402287, guid: 9eda540c811a8704eb9568436a3518b2, type: 3}
+  gfxShield: {fileID: 7570351883610675727}
 --- !u!54 &3651441738084244097
 Rigidbody:
   m_ObjectHideFlags: 0

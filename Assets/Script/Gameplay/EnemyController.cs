@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 [RequireComponent(typeof(Rigidbody))]
 public class EnemyController : CharacterController
 {
@@ -11,6 +13,8 @@ public class EnemyController : CharacterController
     private float initalWait = 0f;
     private float timer = 0f;
 
+    public Slider hpBar = null;
+    public Slider lateHpBar = null;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +25,10 @@ public class EnemyController : CharacterController
         //CHANGE THIS TO A MANAGER GIVING THE PLAYER REFERENCE
         playerRef = FindAnyObjectByType<PlayerController>();
         //TODO
+
+        lateHpBar.maxValue = maxHealth;
+        hpBar.maxValue = maxHealth;
+
     }
 
     // Update is called once per frame
@@ -75,6 +83,19 @@ public class EnemyController : CharacterController
                 Destroy(this.gameObject);
                 break;
             default: break;
+        }
+    }
+
+    public override void HitDamage(int hp)
+    {
+        if (lateHpBar != null)
+        {
+            lateHpBar.value = this.health;
+        }
+        base.HitDamage(hp);
+        if (hpBar != null)
+        {
+            hpBar.value = this.health;
         }
     }
 

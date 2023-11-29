@@ -25,6 +25,11 @@ public class PlayerController : CharacterController
     private GameObject Instanced_Cursor;
     private bool cameraRayMouseStatus = false;
     private Vector3 oldMousePosition = Vector3.zero;
+
+    public GameObject gfxShield;
+
+
+
     private void Start()
     {
         if (UiManager.Instance != null)
@@ -193,6 +198,7 @@ public class PlayerController : CharacterController
         state = CharacterSTATES.HIT;
         if (bullets <= 0)
         {
+            
             health -= hp;
         }
         else
@@ -203,6 +209,10 @@ public class PlayerController : CharacterController
                 SpawnBullet(Vector3.zero,false,Bullet.BulletStates.AfterHit);//Spawn bullet on the ground
             ReducceBullets(); //Reducce the amount of bullets
             ReduceSize();
+        }
+        if (gfxShield != null)
+        {
+            gfxShield.SetActive(bullets > 0);
         }
         BroadcastHurt();
     }

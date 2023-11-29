@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Billboard : MonoBehaviour
 {
+    public bool frameConsistent = false;
     void OnEnable()
     {
         if (!GetComponent<Renderer>().isVisible)
@@ -18,7 +19,9 @@ public class Billboard : MonoBehaviour
 
     void LateUpdate()
     {
-
+        if (frameConsistent) {
+            transform.forward = Camera.main.transform.forward;
+        }
     }
 
     void OnBecameVisible()
