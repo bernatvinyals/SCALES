@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 801679791700972910}
   - component: {fileID: 2782300481502106643}
   - component: {fileID: 1327413080201074062}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: GFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f72aa596cc40cad4bb751cb0e4eec7c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  frameConsistent: 0
 --- !u!1 &958824098553008478
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,7 +110,7 @@ GameObject:
   - component: {fileID: 288753852457006471}
   - component: {fileID: 3651441738084244097}
   - component: {fileID: 7735738623942970726}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -208,7 +209,7 @@ GameObject:
   - component: {fileID: 7763981917884783025}
   - component: {fileID: 1396849975081693665}
   - component: {fileID: 6615674391281064855}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -292,6 +293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f72aa596cc40cad4bb751cb0e4eec7c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  frameConsistent: 0
 --- !u!1 &7710574572553950411
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,7 +304,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4895378566177412155}
   - component: {fileID: 8965562681405710793}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Colisions
   m_TagString: Player
   m_Icon: {fileID: 0}
